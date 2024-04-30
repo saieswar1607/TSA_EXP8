@@ -110,15 +110,15 @@ plt.show()
 
 ### OUTPUT:
 
-# Plot the original data and fitted value
+#### Plot the original data and fitted value
 ![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/5f971aea-be3c-425c-bcb9-95cd27cb2888)
 
-# Plot Partial Autocorrelation Function (PACF) and Autocorrelation Function (ACF)
+#### Plot Partial Autocorrelation Function (PACF) and Autocorrelation Function (ACF)
 ![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/ee9aff85-0bac-47df-a947-9e0c6c4846ad)
 
 ![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/2a57d8fd-e564-4bf4-a92b-c4bd759151be)
 
-# Plot the original data and predictions
+#### Plot the original data and predictions
 ![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/b29540db-745b-47d9-a151-9de1f739b656)
 ### RESULT:
 Thus we have successfully implemented the Moving Average Model and Exponential smoothing using python.
