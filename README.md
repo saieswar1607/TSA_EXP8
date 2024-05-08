@@ -1,124 +1,82 @@
-# Ex.No: 08     MOVINTG AVERAGE MODEL AND EXPONENTIAL SMOOTHING
+# Ex.No: 08 MOVING AVERAGE MODEL USING PYTHON
 ### Date: 
 
 ### AIM:
-To implement Moving Average Model and Exponential smoothing Using Python.
+
+To implement Moving Average Model using python programming.
+
 ### ALGORITHM:
-1. Import necessary libraries
-2. Read the electricity time series data from a CSV file,Display the shape and the first 20 rows of
-the dataset
-3. Set the figure size for plots
-4. Suppress warnings
-5. Plot the first 50 values of the 'Value' column
-6. Perform rolling average transformation with a window size of 5
-7. Display the first 10 values of the rolling mean
-8. Perform rolling average transformation with a window size of 10
-9. Create a new figure for plotting,Plot the original data and fitted value
-10. Show the plot
-11. Also perform exponential smoothing and plot the graph
+
+**Step 1:** Import Packages by Loading required libraries.
+
+**Step 2:** Read Dataset, Import data from a CSV file.
+
+**Step 3:** Generate White Noise by Creating random noise with specified mean and standard deviation.
+
+**Step 4:** Apply Moving Average by Calculating moving averages over the noise.
+
+**Step 5:** Plot Moving Average Series and Visualize the moving average data.
+
+**Step 6:** Simulate ARMA Process to Generate data using ARMA model with given coefficients.
+
+**Step 7:** Plot Simulated Series and Display the simulated data.
+
 ### PROGRAM:
 ```
-Developed by: Sai Eswar Kandukuri
-Reg No: 212221240020
+Developed By : Sai Eswar Kandukuri
+Reg no. : 212221240020
 ```
-#### Import the packages
-```
-import numpy as np
-import pandas as pd
+```python
+# Importing Packages
 import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller
-from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
-from statsmodels.tsa.ar_model import AutoReg
-from sklearn.metrics import mean_squared_error
-```
-#### Read the Airline Passengers dataset from a CSV file
-```
-data = pd.read_csv("/content/airline.csv")
-```
-#### Display the shape and the first 50 rows of the dataset
-```
-print("Shape of the dataset:", data.shape)
-print("First 50 rows of the dataset:")
-print(data.head(50))
-```
-#### Plot the first 50 values of the 'International' column
-```
-plt.plot(data['International '].head(50))
-plt.title('First 50 values of the "International" column')
-plt.xlabel('Index')
-plt.ylabel('International Passengers')
-plt.show()
-```
-#### Perform rolling average transformation with a window size of 5
-```
-rolling_mean_5 = data['International '].rolling(window=5).mean()
-```
-#### Display the first 10 values of the rolling mean
-```
-print("First 10 values of the rolling mean with window size 5:")
-print(rolling_mean_5.head(10))
-```
-#### Perform rolling average transformation with a window size of 10
-```
-rolling_mean_10 = data['International '].rolling(window=10).mean()
-```
-#### Plot the original data and fitted value (rolling mean with window size 10)
-```
-plt.plot(data['International '], label='Original Data')
-plt.plot(rolling_mean_10, label='Rolling Mean (window=10)')
-plt.title('Original Data and Fitted Value (Rolling Mean)')
-plt.xlabel('Index')
-plt.ylabel('International Passengers')
-plt.legend()
-plt.show()
-```
-#### Fit an AutoRegressive (AR) model with 13 lags
-```
-lag_order = 13
-model = AutoReg(data['International '], lags=lag_order)
-model_fit = model.fit()
-```
-#### Plot Partial Autocorrelation Function (PACF) and Autocorrelation Function (ACF)
-```
-plot_acf(data['International '])
-plt.title('Autocorrelation Function (ACF)')
+import pandas as pd
+import numpy as np
+from statsmodels.tsa.arima_process import ArmaProcess
+
+# Reading Dataset
+data = pd.read_csv("/content/Turbine_Data.csv")
+
+# Generating White Noise
+mean = 0
+std = 1
+n = len(data)
+white_noise = np.random.normal(mean, std, size=n)
+
+data['WhiteNoise'] = white_noise
+w_series = pd.Series(white_noise)
+
+# Applying Moving Average
+window_size = 3
+windows = w_series.rolling(window_size)
+moving_averages = windows.mean()
+
+# Plotting Moving Average Series
+plt.figure(figsize=(18, 6))
+plt.plot(moving_averages)
+plt.title("Moving Average Series", fontsize=14)
+plt.xlabel("Time", fontsize=14)
 plt.show()
 
-plot_pacf(data['International '])
-plt.title('Partial Autocorrelation Function (PACF)')
-plt.show()
-```
-#### Make predictions using the AR model
-```
-predictions = model_fit.predict(start=lag_order, end=len(data)-1)
-```
-#### Compare the predictions with the original data
-```
-mse = mean_squared_error(data['International '][lag_order:], predictions)
-print('Mean Squared Error (MSE):', mse)
-```
-#### Plot the original data and predictions
-```
-plt.plot(data['International '][lag_order:], label='Original Data')
-plt.plot(predictions, label='Predictions')
-plt.title('AR Model Predictions vs Original Data')
-plt.xlabel('Index')
-plt.ylabel('International Passengers')
-plt.legend()
-plt.show()
-```
+# Simulating ARMA Process
+ar1 = np.array([1])
+ma1 = np.array([1, 0.6])
+data_subset = data['ActivePower'].iloc[:100]
+MA_object = ArmaProcess(ar1, ma1)
+simulated_data = MA_object.generate_sample(nsample=100)
+simulated_series = pd.Series(simulated_data, index=data_subset.index)
 
+# Plotting Simulated MA(1) Series
+plt.plot(simulated_series)
+plt.title("MA(1), $\\theta$ = 0.6")
+plt.show()
+
+```
 ### OUTPUT:
 
-#### Plot the original data and fitted value
-![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/5f971aea-be3c-425c-bcb9-95cd27cb2888)
+<img width="707" alt="1" src="https://github.com/saieswar1607/TSA_EXP8/assets/93427011/58700cd2-9032-417b-91e2-90cbbff9a632">
+<img width="344" alt="2" src="https://github.com/saieswar1607/TSA_EXP8/assets/93427011/c26b5e1d-16fc-4508-84bb-943a9873ee6b">
 
-#### Plot Partial Autocorrelation Function (PACF) and Autocorrelation Function (ACF)
-![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/ee9aff85-0bac-47df-a947-9e0c6c4846ad)
 
-![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/2a57d8fd-e564-4bf4-a92b-c4bd759151be)
 
-#### Plot the original data and predictions
-![image](https://github.com/Vivekreddy8360/TSA_EXP8/assets/94525701/b29540db-745b-47d9-a151-9de1f739b656)
 ### RESULT:
-Thus we have successfully implemented the Moving Average Model and Exponential smoothing using python.
+Thus we have successfully implemented the Moving Average Model using python.
